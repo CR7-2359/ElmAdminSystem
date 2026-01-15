@@ -4,7 +4,10 @@ import com.neusoft.elm.dao.impl.AdminDao;
 import com.neusoft.elm.dao.impl.BusinessDao;
 import com.neusoft.elm.po.Admin;
 import com.neusoft.elm.po.Business;
+import com.neusoft.elm.utils.CsvUtil;
 import com.neusoft.elm.utils.InputUtil;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdminView {
@@ -56,6 +59,9 @@ public class AdminView {
                 case 4:
                     deleteBusinessFlow();
                     break;
+                case 5:
+                    exportBusinessesFlow();
+                    break;
                 case 0:
                     System.out.println("已退出登录。");
                     return;
@@ -73,6 +79,7 @@ public class AdminView {
         System.out.println("2. 查看所有商家");
         System.out.println("3. 新增商家");
         System.out.println("4. 删除商家");
+        System.out.println("5. 导出商家列表");
         System.out.println("0. 退出登录");
     }
 
@@ -128,5 +135,32 @@ public class AdminView {
         int id = InputUtil.readInt("要删除的商家编号: ");
         boolean ok = businessDao.deleteById(id);
         System.out.println(ok ? "商家删除成功。" : "商家删除失败。");
+    }
+
+    private void exportBusinessesFlow() {
+        String filePath = InputUtil.readLine("导出文件名(回车默认business.csv): ");
+        if (filePath.isEmpty()) {
+            filePath = "business.csv";
+        }
+        filePath = "csvData/" + filePath;
+        List<Business> businesses = businessDao.listAll();
+        List<String[]> rows = new ArrayList<>();
+        rows.add(new String[]{"编号", "账号", "名称", "电话", "地址", "描述"});
+        for (Business business : businesses) {
+            rows.add(new String[]{
+                    String.valueOf(business.getId()),
+                    business.getAccount(),
+                    business.getName(),
+                    business.getPhone(),
+                    business.getAddress(),
+                    business.getDescription()
+            });
+        }
+        try {
+            CsvUtil.writeCsv(Path.of(filePath), rows);
+            System.out.println("导出成功: " + filePath);
+        } catch (Exception ex) {
+            System.out.println("导出失败: " + ex.getMessage());
+        }
     }
 }

@@ -2,8 +2,11 @@ package com.neusoft.elm.view.impl;
 
 import com.neusoft.elm.dao.impl.FoodDao;
 import com.neusoft.elm.po.Food;
+import com.neusoft.elm.utils.CsvUtil;
 import com.neusoft.elm.utils.InputUtil;
 import java.math.BigDecimal;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FoodService {
@@ -87,5 +90,32 @@ public class FoodService {
         int id = InputUtil.readInt("要删除的食品编号: ");
         boolean ok = foodDao.deleteByIdForBusiness(businessId, id);
         System.out.println(ok ? "食品删除成功。" : "食品删除失败。");
+    }
+
+    public void exportFoods(int businessId) {
+        String filePath = InputUtil.readLine("导出文件名(回车默认foods_" + businessId + ".csv): ");
+        if (filePath.isEmpty()) {
+            filePath = "foods_" + businessId + ".csv";
+        }
+        filePath = "csvData/" + filePath;
+        List<Food> foods = foodDao.listByBusinessId(businessId);
+        List<String[]> rows = new ArrayList<>();
+        rows.add(new String[]{"编号", "名称", "价格", "状态", "描述"});
+        for (Food food : foods) {
+            String statusText = food.getStatus() == 1 ? "上架" : "下架";
+            rows.add(new String[]{
+                    String.valueOf(food.getId()),
+                    food.getName(),
+                    String.valueOf(food.getPrice()),
+                    statusText,
+                    food.getDescription()
+            });
+        }
+        try {
+            CsvUtil.writeCsv(Path.of(filePath), rows);
+            System.out.println("导出成功: " + filePath);
+        } catch (Exception ex) {
+            System.out.println("导出失败: " + ex.getMessage());
+        }
     }
 }

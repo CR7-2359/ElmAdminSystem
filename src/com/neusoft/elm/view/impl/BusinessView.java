@@ -62,6 +62,9 @@ public class BusinessView {
                 case 7:
                     foodService.deleteFood(business.getId());
                     break;
+                case 8:
+                    foodService.exportFoods(business.getId());
+                    break;
                 case 0:
                     System.out.println("已退出登录。");
                     return;
@@ -82,6 +85,7 @@ public class BusinessView {
         System.out.println("5. 新增食品");
         System.out.println("6. 修改食品");
         System.out.println("7. 删除食品");
+        System.out.println("8. 导出食品列表");
         System.out.println("0. 退出登录");
     }
 
