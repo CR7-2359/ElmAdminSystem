@@ -196,3 +196,5 @@ CREATE TABLE food (
 - 管理员端：`com.neusoft.elm.view.ElmAdminEntry`
 - 商家端：`com.neusoft.elm.view.ElmBusinessEntry`
 - 统一入口：`com.neusoft.elm.view.Main`
+
+## tips： 如果你也是东软实训的学生，直接gitclone吧hhhhhhhh😂
