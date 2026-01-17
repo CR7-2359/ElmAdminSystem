@@ -21,6 +21,8 @@ public final class ConsoleUi {
     public static final String ICON_USER = "👤";
     public static final String ICON_WELCOME = "🎉";
     public static final String ICON_PASSWORD = "🔐";
+    public static final String ICON_PREV = "⬅";
+    public static final String ICON_NEXT = "➡";
 
     public static final String DIVIDER = "========================================";
 

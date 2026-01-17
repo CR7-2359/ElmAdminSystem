@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FoodService {
+    private static final int PAGE_SIZE = 10;
     private final FoodDao foodDao = new FoodDao();
 
     public void listFoods(int businessId) {
@@ -19,17 +20,11 @@ public class FoodService {
             System.out.println(ConsoleUi.info("暂无数据。"));
             return;
         }
-        System.out.println(ConsoleUi.label(ConsoleUi.ICON_FOOD, "食品列表"));
-        System.out.printf("%-5s %-20s %-8s %-6s %-20s%n",
-                "编号", "名称", "价格", "状态", "描述");
-        for (Food food : foods) {
-            System.out.printf("%-5d %-20s %-8s %-6s %-20s%n",
-                    food.getId(),
-                    food.getName(),
-                    food.getPrice(),
-                    food.getStatus(),
-                    food.getDescription());
+        if (foods.size() <= PAGE_SIZE) {
+            printFoodTable(foods, 1, 1);
+            return;
         }
+        paginateFoods(foods);
     }
 
     public void addFood(int businessId) {
@@ -118,6 +113,57 @@ public class FoodService {
             System.out.println(ConsoleUi.success("导出成功: " + filePath));
         } catch (Exception ex) {
             System.out.println(ConsoleUi.error("导出失败: " + ex.getMessage()));
+        }
+    }
+
+    private void paginateFoods(List<Food> foods) {
+        int totalPages = (foods.size() + PAGE_SIZE - 1) / PAGE_SIZE;
+        int pageIndex = 0;
+        while (true) {
+            int start = pageIndex * PAGE_SIZE;
+            int end = Math.min(start + PAGE_SIZE, foods.size());
+            printFoodTable(foods.subList(start, end), pageIndex + 1, totalPages);
+            System.out.println();
+            System.out.println(ConsoleUi.label(ConsoleUi.ICON_MENU, "分页操作"));
+            System.out.println("1. " + ConsoleUi.ICON_PREV + " 上一页");
+            System.out.println("2. " + ConsoleUi.ICON_NEXT + " 下一页");
+            System.out.println("0. " + ConsoleUi.ICON_EXIT + " 退出查询");
+            int choice = InputUtil.readInt("请选择: ");
+            switch (choice) {
+                case 1:
+                    if (pageIndex == 0) {
+                        System.out.println(ConsoleUi.warn("已经是第一页。"));
+                    } else {
+                        pageIndex--;
+                    }
+                    break;
+                case 2:
+                    if (pageIndex >= totalPages - 1) {
+                        System.out.println(ConsoleUi.warn("已经是最后一页。"));
+                    } else {
+                        pageIndex++;
+                    }
+                    break;
+                case 0:
+                    return;
+                default:
+                    System.out.println(ConsoleUi.warn("无效选项。"));
+                    break;
+            }
+        }
+    }
+
+    private void printFoodTable(List<Food> foods, int page, int totalPages) {
+        System.out.println(ConsoleUi.label(ConsoleUi.ICON_FOOD, "食品列表 (第 " + page + "/" + totalPages + " 页)"));
+        System.out.printf("%-5s %-20s %-8s %-6s %-20s%n",
+                "编号", "名称", "价格", "状态", "描述");
+        for (Food food : foods) {
+            System.out.printf("%-5d %-20s %-8s %-6s %-20s%n",
+                    food.getId(),
+                    food.getName(),
+                    food.getPrice(),
+                    food.getStatus(),
+                    food.getDescription());
         }
     }
 }
