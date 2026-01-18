@@ -13,6 +13,12 @@ import java.util.List;
 /* 食品管理业务与导出 */
 public class FoodService {
     private static final int PAGE_SIZE = 10;
+    private static final int COL_ID = 6;
+    private static final int COL_NAME = 22;
+    private static final int COL_PRICE = 10;
+    private static final int COL_STATUS = 6;
+    private static final int COL_DESC = 24;
+    private static final int COL_GAP = 2;
     private final FoodDao foodDao = new FoodDao();
 
     /* 分页展示食品列表 */
@@ -163,15 +169,98 @@ public class FoodService {
     /* 打印食品表格 */
     private void printFoodTable(List<Food> foods, int page, int totalPages) {
         System.out.println(ConsoleUi.label(ConsoleUi.ICON_FOOD, "食品列表 (第 " + page + "/" + totalPages + " 页)"));
-        System.out.printf("%-5s %-20s %-8s %-6s %-20s%n",
-                "编号", "名称", "价格", "状态", "描述");
+        String header = fitLeft("编号", COL_ID) + spaces(COL_GAP)
+                + fitLeft("名称", COL_NAME) + spaces(COL_GAP)
+                + fitLeft("价格", COL_PRICE) + spaces(COL_GAP)
+                + fitLeft("状态", COL_STATUS) + spaces(COL_GAP + 3)
+                + fitLeft("描述", COL_DESC);
+        System.out.println(header);
         for (Food food : foods) {
-            System.out.printf("%-5d %-20s %-8s %-6s %-20s%n",
-                    food.getId(),
-                    food.getName(),
-                    food.getPrice(),
-                    food.getStatus(),
-                    food.getDescription());
+            String idText = String.valueOf(food.getId());
+            String nameText = nullToEmpty(food.getName());
+            String priceText = food.getPrice() == null ? "" : food.getPrice().toPlainString();
+            String statusText = String.valueOf(food.getStatus());
+            String descText = nullToEmpty(food.getDescription());
+            String line = fitLeft(idText, COL_ID) + spaces(COL_GAP)
+                    + fitLeft(nameText, COL_NAME) + spaces(COL_GAP)
+                    + fitLeft(priceText, COL_PRICE) + spaces(COL_GAP)
+                    + fitLeft(statusText, COL_STATUS) + spaces(COL_GAP)
+                    + fitLeft(descText, COL_DESC);
+            System.out.println(line);
         }
+    }
+
+    /* 按显示宽度左对齐，长度不足补空格 */
+    private String fitLeft(String text, int width) {
+        String value = nullToEmpty(text);
+        if (width <= 0) {
+            return "";
+        }
+        String clipped = truncateDisplay(value, width);
+        int padding = width - displayWidth(clipped);
+        return clipped + spaces(padding);
+    }
+
+    /* 超出显示宽度则截断 */
+    private String truncateDisplay(String text, int maxWidth) {
+        if (text.isEmpty() || maxWidth <= 0) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        int width = 0;
+        for (int i = 0; i < text.length(); ) {
+            int codePoint = text.codePointAt(i);
+            int charCount = Character.charCount(codePoint);
+            int charWidth = isWideCodePoint(codePoint) ? 2 : 1;
+            if (width + charWidth > maxWidth) {
+                break;
+            }
+            sb.appendCodePoint(codePoint);
+            width += charWidth;
+            i += charCount;
+        }
+        return sb.toString();
+    }
+
+    /* 计算显示宽度（中文等全角字符算 2） */
+    private int displayWidth(String text) {
+        int width = 0;
+        for (int i = 0; i < text.length(); ) {
+            int codePoint = text.codePointAt(i);
+            width += isWideCodePoint(codePoint) ? 2 : 1;
+            i += Character.charCount(codePoint);
+        }
+        return width;
+    }
+
+    /* 判断宽字符范围 */
+    private boolean isWideCodePoint(int codePoint) {
+        Character.UnicodeBlock block = Character.UnicodeBlock.of(codePoint);
+        return block == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS
+                || block == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A
+                || block == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B
+                || block == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS
+                || block == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT
+                || block == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION
+                || block == Character.UnicodeBlock.HIRAGANA
+                || block == Character.UnicodeBlock.KATAKANA
+                || block == Character.UnicodeBlock.KATAKANA_PHONETIC_EXTENSIONS
+                || block == Character.UnicodeBlock.HANGUL_SYLLABLES
+                || block == Character.UnicodeBlock.HANGUL_JAMO
+                || block == Character.UnicodeBlock.HANGUL_COMPATIBILITY_JAMO
+                || block == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS;
+    }
+
+    /* 生成指定数量空格 */
+    private String spaces(int count) {
+        if (count <= 0) {
+            return "";
+        }
+        return " ".repeat(count);
+    }
+
+    /* 空字符串兜底 */
+    private String nullToEmpty(String text) {
+        return text == null ? "" : text;
     }
 }
