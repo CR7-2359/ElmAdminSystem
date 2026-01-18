@@ -1,81 +1,81 @@
 package com.neusoft.elm.po;
 
-/* Business entity */
+/* 商家实体 */
 public class Business {
-    private int id; // business id
-    private String account; // login account
-    private String password; // login password
-    private String name; // business name
-    private String phone; // contact phone
-    private String address; // business address
-    private String description; // business description
+    private int id; // 商家编号
+    private String account; // 登录账号
+    private String password; // 登录密码
+    private String name; // 商家名称
+    private String phone; // 联系电话
+    private String address; // 商家地址
+    private String description; // 商家描述
 
-    /* Get id */
+    /* 获取编号 */
     public int getId() {
         return id;
     }
 
-    /* Set id */
+    /* 设置编号 */
     public void setId(int id) {
         this.id = id;
     }
 
-    /* Get account */
+    /* 获取账号 */
     public String getAccount() {
         return account;
     }
 
-    /* Set account */
+    /* 设置账号 */
     public void setAccount(String account) {
         this.account = account;
     }
 
-    /* Get password */
+    /* 获取密码 */
     public String getPassword() {
         return password;
     }
 
-    /* Set password */
+    /* 设置密码 */
     public void setPassword(String password) {
         this.password = password;
     }
 
-    /* Get name */
+    /* 获取名称 */
     public String getName() {
         return name;
     }
 
-    /* Set name */
+    /* 设置名称 */
     public void setName(String name) {
         this.name = name;
     }
 
-    /* Get phone */
+    /* 获取电话 */
     public String getPhone() {
         return phone;
     }
 
-    /* Set phone */
+    /* 设置电话 */
     public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    /* Get address */
+    /* 获取地址 */
     public String getAddress() {
         return address;
     }
 
-    /* Set address */
+    /* 设置地址 */
     public void setAddress(String address) {
         this.address = address;
     }
 
-    /* Get description */
+    /* 获取描述 */
     public String getDescription() {
         return description;
     }
 
-    /* Set description */
+    /* 设置描述 */
     public void setDescription(String description) {
         this.description = description;
     }

@@ -140,6 +140,7 @@ public class FoodService {
             System.out.println(ConsoleUi.label(ConsoleUi.ICON_MENU, "分页操作"));
             System.out.println("1. " + ConsoleUi.ICON_PREV + " 上一页");
             System.out.println("2. " + ConsoleUi.ICON_NEXT + " 下一页");
+            System.out.println("3. " + ConsoleUi.ICON_MENU + " 跳转页码");
             System.out.println("0. " + ConsoleUi.ICON_EXIT + " 退出查询");
             int choice = InputUtil.readInt("请选择: "); // 读取操作
             switch (choice) {
@@ -155,6 +156,14 @@ public class FoodService {
                         System.out.println(ConsoleUi.warn("已经是最后一页。"));
                     } else {
                         pageIndex++;
+                    }
+                    break;
+                case 3:
+                    int targetPage = InputUtil.readInt("请输入页码(1-" + totalPages + "): ");
+                    if (targetPage < 1 || targetPage > totalPages) {
+                        System.out.println(ConsoleUi.warn("页码超出范围。"));
+                    } else {
+                        pageIndex = targetPage - 1;
                     }
                     break;
                 case 0:

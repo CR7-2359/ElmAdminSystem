@@ -2,71 +2,71 @@ package com.neusoft.elm.po;
 
 import java.math.BigDecimal;
 
-/* Food entity */
+/* 食品实体 */
 public class Food {
-    private int id; // food id
-    private int businessId; // owner business id
-    private String name; // food name
-    private BigDecimal price; // food price
-    private String description; // food description
-    private int status; // food status
+    private int id; // 食品编号
+    private int businessId; // 所属商家编号
+    private String name; // 食品名称
+    private BigDecimal price; // 食品价格
+    private String description; // 食品描述
+    private int status; // 食品状态
 
-    /* Get id */
+    /* 获取编号 */
     public int getId() {
         return id;
     }
 
-    /* Set id */
+    /* 设置编号 */
     public void setId(int id) {
         this.id = id;
     }
 
-    /* Get business id */
+    /* 获取商家编号 */
     public int getBusinessId() {
         return businessId;
     }
 
-    /* Set business id */
+    /* 设置商家编号 */
     public void setBusinessId(int businessId) {
         this.businessId = businessId;
     }
 
-    /* Get name */
+    /* 获取名称 */
     public String getName() {
         return name;
     }
 
-    /* Set name */
+    /* 设置名称 */
     public void setName(String name) {
         this.name = name;
     }
 
-    /* Get price */
+    /* 获取价格 */
     public BigDecimal getPrice() {
         return price;
     }
 
-    /* Set price */
+    /* 设置价格 */
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    /* Get description */
+    /* 获取描述 */
     public String getDescription() {
         return description;
     }
 
-    /* Set description */
+    /* 设置描述 */
     public void setDescription(String description) {
         this.description = description;
     }
 
-    /* Get status */
+    /* 获取状态 */
     public int getStatus() {
         return status;
     }
 
-    /* Set status */
+    /* 设置状态 */
     public void setStatus(int status) {
         this.status = status;
     }
